@@ -1,16 +1,16 @@
 import { test, expect } from '@playwright/test';
 import { CreateArticlePage } from './CreateArticlePage';
 
-let createArticlePage;
 export class ViewArticlePage {
   constructor(page) {
     this.page = page;
-    createArticlePage = new CreateArticlePage(page);
+    this.createArticlePage = new CreateArticlePage(page);
+    this.articleTitleHeader = page.getByRole('heading');
   }
 
   async assertArticleTitleIsVisible(title) {
     await test.step(`Assert the article has correct title'`, async () => {
-      await expect(createArticlePage.articleTitleHeader).toContainText(title);
+      await expect(this.articleTitleHeader).toContainText(title);
     });
   }
 

@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { HomePage } from '../../src/ui/pages/HomePage';
-import { createArticle } from '../../src/ui/actions/article/createNewArticle';
+import { createNewArticle } from '../../src/ui/actions/article/createNewArticle';
 import { generateNewUserData } from '../../src/common/testData/generateNewUserData';
 import { generateNewArticleData } from '../../src/common/testData/generateNewArticleData';
 import { signUpUser } from '../../src/ui/actions/auth/signUpUser';
@@ -21,7 +21,7 @@ test.beforeEach(async ({ page }) => {
 
 test('Create an article with required fields', async ({ page }) => {
   await homePage.clickNewArticleLink();
-  await createArticle(page, article);
+  await createNewArticle(page, article);
 
   await viewArticlePage.assertArticleTitleIsVisible(article.title);
   await viewArticlePage.assertArticleTextIsVisible(article.text);

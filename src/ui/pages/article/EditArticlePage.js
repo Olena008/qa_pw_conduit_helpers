@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { CreateArticlePage } from './CreateArticlePage';
-
-let createArticlePage;
+import { ViewArticlePage } from './ViewArticlePage';
 
 export class EditArticlePage {
   constructor(page) {
     this.page = page;
-    createArticlePage = new CreateArticlePage(page);
+    this.createArticlePage = new CreateArticlePage(page);
+    this.viewArticlePage = new ViewArticlePage(page);
     this.editArticleButton = page
       .getByRole('link', { name: ' Edit Article' })
       .first();
@@ -14,16 +14,16 @@ export class EditArticlePage {
     this.updateArticle = page.getByRole('button', { name: 'Update Article' });
   }
 
-  async editArticleField(page, field) {
+  async editArticleField(page, field, newValue) {
     await test.step(`Edit existing article ${field} field`, async () => {
-      await createArticlePage[field].click();
+      await this.createArticlePage[field].click();
 
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (field === 'tagsField') {
-        await createArticlePage[field].type('new');
-        await createArticlePage.pressEnterInTagsField();
+        await this.createArticlePage[field].type(newValue);
+        await this.createArticlePage.pressEnterInTagsField();
       } else {
-        await createArticlePage[field].type(' new');
+        await this.createArticlePage[field].type(newValue);
       }
       await Promise.all([
         page.waitForURL('**/article/**'),
@@ -45,8 +45,8 @@ export class EditArticlePage {
   }
 
   async clearInput(input) {
-    await test.step('Remove a title for the existing article', async () => {
-      await createArticlePage[input].fill('');
+    await test.step(`Remove a ${input} for the existing article`, async () => {
+      await this.createArticlePage[input].fill('');
     });
   }
 
@@ -59,7 +59,7 @@ export class EditArticlePage {
   async assertTitleUpdated(title) {
     await test.step(`Assert the ${title} field is updated`, async () => {
       await this.page.reload({ waitUntil: 'commit' });
-      await expect(createArticlePage.articleTitleHeader).toContainText(
+      await expect(this.viewArticlePage.articleTitleHeader).toContainText(
         `${title} new`,
       );
     });
@@ -69,6 +69,14 @@ export class EditArticlePage {
     await test.step(`Assert the ${text} field is updated`, async () => {
       await this.page.reload({ waitUntil: 'commit' });
       await expect(this.page.getByText(`${text} new`)).toBeVisible();
+    });
+  }
+
+  async assertErrorMessageContainsText(messageText) {
+    await test.step(`Assert the '${messageText}' error is shown`, async () => {
+      await expect(this.createArticlePage.errorMessage).toContainText(
+        messageText,
+      );
     });
   }
 }

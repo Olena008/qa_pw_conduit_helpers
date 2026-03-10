@@ -7,7 +7,6 @@ export class CreateArticlePage {
     this.descriptionField = page.getByPlaceholder(`What's this article about?`);
     this.textField = page.getByPlaceholder('Write your article (in markdown)');
     this.tagsField = page.getByPlaceholder('Enter tags');
-    this.articleTitleHeader = page.getByRole('heading');
     this.publishArticleButton = page.getByRole('button', {
       name: 'Publish Article',
     });
