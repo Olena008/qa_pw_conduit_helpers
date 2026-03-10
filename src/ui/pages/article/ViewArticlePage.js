@@ -1,20 +1,37 @@
 import { test, expect } from '@playwright/test';
+import { CreateArticlePage } from './CreateArticlePage';
 
+let createArticlePage;
 export class ViewArticlePage {
   constructor(page) {
     this.page = page;
-    this.articleTitleHeader = page.getByRole('heading');
+    createArticlePage = new CreateArticlePage(page);
   }
 
   async assertArticleTitleIsVisible(title) {
     await test.step(`Assert the article has correct title'`, async () => {
-      await expect(this.articleTitleHeader).toContainText(title);
+      await expect(createArticlePage.articleTitleHeader).toContainText(title);
     });
   }
 
   async assertArticleTextIsVisible(text) {
     await test.step(`Assert the article has correct text'`, async () => {
       await expect(this.page.getByText(text)).toBeVisible();
+    });
+  }
+
+  async assertTagsAreVisible(tags) {
+    await test.step(`Assert the article has correct tags'`, async () => {
+      await this.page.reload({ waitUntil: 'commit' });
+      for (const tag of tags) {
+        await expect(this.page.getByText(tag, { exact: true })).toBeVisible();
+      }
+    });
+  }
+
+  async assertRemovedTag() {
+    await test.step(`Assert the article has correct tags'`, async () => {
+      await expect(this.page.locator('.tag-list')).toBeHidden();
     });
   }
 }
