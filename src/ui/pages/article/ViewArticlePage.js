@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { CreateArticlePage } from './CreateArticlePage';
 
 export class ViewArticlePage {
   constructor(page) {
     this.page = page;
-    this.createArticlePage = new CreateArticlePage(page);
     this.articleTitleHeader = page.getByRole('heading');
   }
 
@@ -15,6 +13,12 @@ export class ViewArticlePage {
   }
 
   async assertArticleTextIsVisible(text) {
+    await test.step(`Assert the article has correct text'`, async () => {
+      await expect(this.page.getByText(text)).toBeVisible();
+    });
+  }
+
+  async assertArticleDescriptiontIsVisible(text) {
     await test.step(`Assert the article has correct text'`, async () => {
       await expect(this.page.getByText(text)).toBeVisible();
     });

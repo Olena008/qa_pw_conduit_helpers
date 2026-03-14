@@ -20,10 +20,10 @@ export class EditArticlePage {
 
       // eslint-disable-next-line playwright/no-conditional-in-test
       if (field === 'tagsField') {
-        await this.createArticlePage[field].type(newValue);
+        await this.createArticlePage[field].fill(newValue);
         await this.createArticlePage.pressEnterInTagsField();
       } else {
-        await this.createArticlePage[field].type(newValue);
+        await this.createArticlePage[field].fill(newValue);
       }
       await Promise.all([
         page.waitForURL('**/article/**'),
@@ -53,22 +53,6 @@ export class EditArticlePage {
   async clickUpdateArticleButton() {
     await test.step(`Click the 'Update Article' button`, async () => {
       await this.updateArticle.click();
-    });
-  }
-
-  async assertTitleUpdated(title) {
-    await test.step(`Assert the ${title} field is updated`, async () => {
-      await this.page.reload({ waitUntil: 'commit' });
-      await expect(this.viewArticlePage.articleTitleHeader).toContainText(
-        `${title} new`,
-      );
-    });
-  }
-
-  async assertTextUpdated(text) {
-    await test.step(`Assert the ${text} field is updated`, async () => {
-      await this.page.reload({ waitUntil: 'commit' });
-      await expect(this.page.getByText(`${text} new`)).toBeVisible();
     });
   }
 

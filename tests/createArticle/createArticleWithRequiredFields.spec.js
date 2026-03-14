@@ -12,7 +12,7 @@ let viewArticlePage;
 
 test.beforeEach(async ({ page }) => {
   homePage = new HomePage(page);
-  article = generateNewArticleData(page, article);
+  article = generateNewArticleData();
   const user = generateNewUserData();
   viewArticlePage = new ViewArticlePage(page);
 

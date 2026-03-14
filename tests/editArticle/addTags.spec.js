@@ -37,7 +37,7 @@ test.describe('Add the tag for the existing article', () => {
 
     await createNewArticle(page, article);
     await editArticlePage.clickEditArticle();
-    await editArticlePage.editArticleField(page, 'tagsField');
+    await editArticlePage.editArticleField(page, 'tagsField', 'new');
     await viewArticlePage.assertTagsAreVisible([...article.tags, 'new']);
   });
 });
